@@ -1,48 +1,47 @@
-
 #!/bin/bash
 
-# -------------------------------
-# Create Plex LXC Container
-# -------------------------------
-echo "📦 Launching updated Plex LXC setup script..."
+# Prompt for container ID
+read -p "🔢 Enter Plex LXC container ID (e.g. 101): " CTID
+
+# Run community Plex LXC script
+echo "📦 Creating Plex LXC using community script..."
 bash -c "$(wget -qLO - https://community-scripts.github.io/ProxmoxVE/scripts/plex-lxc.sh)"
 
-# Prompt user for container ID
-read -p "🔢 Enter the Plex LXC container ID (e.g. 100): " CTID
+echo "🛑 Stopping container immediately after creation..."
+pct shutdown "$CTID" 2>/dev/null
+sleep 3
 
-# -------------------------------
-# Create Plex config dataset on apps pool (if it doesn't exist)
-# -------------------------------
-echo "🗂 Ensuring apps/plexconfig dataset exists..."
-zfs list apps/plexconfig >/dev/null 2>&1 || zfs create apps/plexconfig
+# Create dataset if missing
+echo "📂 Ensuring dataset exists..."
+zfs list core/app-configs/plex >/dev/null 2>&1 || zfs create core/app-configs/plex
 
-# -------------------------------
-# Bind-mount ZFS Datasets (skip if already present)
-# -------------------------------
-echo "📁 Mounting /tank/media to /mnt/media (mp0)..."
-grep -q "mp0:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp0 /tank/media,mp=/mnt/media
+# Bind Plex config dataset and media mount into container
+echo "🔗 Binding datasets into Plex LXC..."
+grep -q "mp0:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp0 /core/app-configs/plex,mp=/config
+grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /tank/media,mp=/mnt/media
 
-echo "📁 Mounting /apps/plexconfig to /var/lib/plexmediaserver (mp1)..."
-grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /apps/plexconfig,mp=/var/lib/plexmediaserver
+# Restore Plex config if valid
+BACKUP_PATH="/tank/app-config-backup/plex-app/config/Library/Application Support/Plex Media Server"
+TARGET_PATH="/core/app-configs/plex/Library/Application Support/Plex Media Server"
 
-# -------------------------------
-# Enable GPU passthrough for Quick Sync
-# -------------------------------
-echo "🎮 Enabling iGPU passthrough..."
-grep -q "c 226:* rwm" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -device 'c 226:* rwm'
-grep -q "mp2:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp2 /dev/dri,mp=/dev/dri
+if [ -f "$BACKUP_PATH/Preferences.xml" ]; then
+  echo "📥 Copying valid backup into place..."
+  mkdir -p "$(dirname "$TARGET_PATH")"
+  rsync -a "$BACKUP_PATH/" "$TARGET_PATH/"
+  echo "✅ Plex configuration restored into mounted dataset."
+else
+  echo "⚠️ Preferences.xml not found in expected backup path. Skipping restore."
+fi
 
-# -------------------------------
-# Add Plex user to media group
-# -------------------------------
-echo "👥 Adding plex user to media group inside the container..."
-pct exec "$CTID" -- bash -c "getent group 1000 || groupadd -g 1000 media"
-pct exec "$CTID" -- bash -c "id -nG plex | grep -qw media || usermod -aG media plex"
+echo "▶️ Starting container..."
+pct start "$CTID"
+sleep 3
 
-# -------------------------------
-# Restart container
-# -------------------------------
-echo "♻️ Restarting LXC $CTID..."
-pct restart "$CTID"
+# Add plex user to media group and set permissions
+echo "👥 Adding 'plex' user to media group (GID 1000)..."
+pct exec "$CTID" -- usermod -aG 1000 plex
 
-echo "✅ Plex LXC setup complete. Please open the Plex web UI to finish configuration."
+echo "🔐 Fixing ownership of config files..."
+pct exec "$CTID" -- chown -R plex:plex /config
+
+echo "🚀 Plex LXC setup complete and started."
