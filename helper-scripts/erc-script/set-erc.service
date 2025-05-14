@@ -1,0 +1,10 @@
+[Unit]
+Description=Set SCT ERC values on startup
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/set-erc.sh
+
+[Install]
+WantedBy=multi-user.target

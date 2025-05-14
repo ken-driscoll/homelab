@@ -1,0 +1,12 @@
+[Unit]
+Description=Stepped fan control script for Supermicro
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/stepped-fan-control.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

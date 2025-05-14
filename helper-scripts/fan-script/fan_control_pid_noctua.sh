@@ -2,11 +2,13 @@
 
 # PID Fan Control Script for Supermicro X11SSH-F
 # Fan setup:
-# - CPU Side (Zone 2): NH-L9x65 + 2x NF-F12 PWM
+# 0 = FAN1..5
+# 1 = FANA..FANC
+# - CPU Side (Zone 0): NH-L9x65 + 2x NF-F12 PWM
 # - HDD Side (Zone 1): NF-F12 + NF-A14 PWM
 
 FAN_ZONE_HDD=1
-FAN_ZONE_CPU=2
+FAN_ZONE_CPU=0
 UPDATE_INTERVAL=30
 MIN_PWM=60
 LOGFILE="/var/log/fan_control.log"
