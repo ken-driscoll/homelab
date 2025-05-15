@@ -21,17 +21,8 @@ grep -q "mp0:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp0 /core/app-configs
 grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /tank/media,mp=/media
 
 # Enable Quick Sync GPU passthrough
-echo "🎮 Enabling GPU passthrough for Intel Quick Sync..."
-grep -q "/dev/dri" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -device /dev/dri
-
-# Restore Plex config if valid
-BACKUP_PATH="/tank/app-config-backup/plex-app/config"
-TARGET_PATH="/core/app-configs/plex"
-
-echo "📥 Copying valid backup into place..."
-mkdir -p "$(dirname "$TARGET_PATH")"
-rsync -a "$BACKUP_PATH/" "$TARGET_PATH/"
-echo "✅ Plex configuration restored into mounted dataset."
+#echo "🎮 Enabling GPU passthrough for Intel Quick Sync..."
+#grep -q "/dev/dri" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -device /dev/dri
 
 # Create media group if it doesn't exist, then add plex to it
 echo "👥 Ensuring 'media' group (GID 1000) exists..."

@@ -14,6 +14,15 @@ zfs list core/app-configs/plex >/dev/null 2>&1 || zfs create core/app-configs/pl
 zfs list core/docker-compose >/dev/null 2>&1 || zfs create core/docker-compose
 zfs list core/media-downloads >/dev/null 2>&1 || zfs create core/media-downloads
 
+# Restore Plex config if valid
+BACKUP_PATH="/tank/app-config-backup/plex-app/config"
+TARGET_PATH="/core/app-configs/plex"
+
+echo "📥 Copying valid backup into place..."
+mkdir -p "$(dirname "$TARGET_PATH")"
+rsync -a "$BACKUP_PATH/" "$TARGET_PATH/"
+echo "✅ Plex configuration restored into mounted dataset."
+
 # Ensure appdata subfolders exist and have proper ownership
 for dir in sabnzbd sonarr radarr readarr prowlarr overseerr homarr; do
   mkdir -p "/core/app-configs/media-services/$dir"
