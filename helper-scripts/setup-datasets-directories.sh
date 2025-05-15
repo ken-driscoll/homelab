@@ -15,7 +15,7 @@ zfs list core/docker-compose >/dev/null 2>&1 || zfs create core/docker-compose
 zfs list core/media-downloads >/dev/null 2>&1 || zfs create core/media-downloads
 
 # Restore Plex config if valid
-BACKUP_PATH="/tank/app-config-backup/plex-app/config"
+BACKUP_PATH="/tank/app-configs-backup/plex-app/config"
 TARGET_PATH="/core/app-configs/plex"
 
 echo "📥 Copying valid backup into place..."
