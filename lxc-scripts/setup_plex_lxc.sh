@@ -21,8 +21,8 @@ grep -q "mp0:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp0 /core/app-configs
 grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /tank/media,mp=/media
 
 # Enable Quick Sync GPU passthrough
-#echo "🎮 Enabling GPU passthrough for Intel Quick Sync..."
-#grep -q "/dev/dri" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -device /dev/dri
+echo "🎮 Enabling GPU passthrough for Intel Quick Sync..."
+grep -q "/dev/dri" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -device /dev/dri
 
 # Create media group if it doesn't exist, then add plex to it
 echo "👥 Ensuring 'media' group (GID 1000) exists..."

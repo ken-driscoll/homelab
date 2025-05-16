@@ -9,6 +9,7 @@ fi
 
 # Create app-configs and docker-compose datasets
 echo "📂 Creating ZFS datasets..."
+zfs list core/app-configs >/dev/null 2>&1 || zfs create core/app-configs
 zfs list core/app-configs/media-services >/dev/null 2>&1 || zfs create core/app-configs/media-services
 zfs list core/app-configs/plex >/dev/null 2>&1 || zfs create core/app-configs/plex
 zfs list core/docker-compose >/dev/null 2>&1 || zfs create core/docker-compose
