@@ -1,3 +1,4 @@
+---
 services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -11,9 +12,8 @@ services:
       - /mnt/media:/media
       - /mnt/downloads/complete:/downloads
     ports:
-      - "8989:8989"
+      - 8989:8989
     restart: unless-stopped
-
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -26,9 +26,8 @@ services:
       - /mnt/media:/media
       - /mnt/downloads/complete:/downloads
     ports:
-      - "7878:7878"
+      - 7878:7878
     restart: unless-stopped
-
   readarr:
     image: lscr.io/linuxserver/readarr:latest
     container_name: readarr
@@ -41,9 +40,8 @@ services:
       - /mnt/media:/media
       - /mnt/downloads/complete:/downloads
     ports:
-      - "8787:8787"
+      - 8787:8787
     restart: unless-stopped
-
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -54,9 +52,8 @@ services:
     volumes:
       - /opt/appdata/prowlarr:/config
     ports:
-      - "9696:9696"
+      - 9696:9696
     restart: unless-stopped
-
   overseerr:
     image: sctx/overseerr:latest
     container_name: overseerr
@@ -65,11 +62,10 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     ports:
-      - "5055:5055"
+      - 5055:5055
     volumes:
       - /opt/appdata/overseerr:/app/config
     restart: unless-stopped
-
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
@@ -82,9 +78,8 @@ services:
       - /mnt/downloads/complete:/downloads
       - /mnt/downloads/incomplete:/incomplete-downloads
     ports:
-      - "8080:8080"
+      - 8080:8080
     restart: unless-stopped
-
   homarr:
     image: ghcr.io/ajnart/homarr:latest
     container_name: homarr
@@ -95,9 +90,8 @@ services:
     volumes:
       - /opt/appdata/homarr:/app/data/configs
     ports:
-      - "7575:7575"
+      - 7575:7575
     restart: unless-stopped
-
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
