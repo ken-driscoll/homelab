@@ -29,7 +29,7 @@ services:
       - 7878:7878
     restart: unless-stopped
   readarr:
-    image: lscr.io/linuxserver/readarr:latest
+    image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
     environment:
       - PUID=1000
@@ -55,7 +55,7 @@ services:
       - 9696:9696
     restart: unless-stopped
   overseerr:
-    image: sctx/overseerr:latest
+    image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
     environment:
       - PUID=1000
