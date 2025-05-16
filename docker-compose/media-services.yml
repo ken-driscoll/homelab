@@ -14,7 +14,6 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
-    user: 1000:1000
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -29,7 +28,6 @@ services:
     ports:
       - 7878:7878
     restart: unless-stopped
-    user: 1000:1000
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
@@ -44,7 +42,6 @@ services:
     ports:
       - 8787:8787
     restart: unless-stopped
-    user: 1000:1000
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -57,7 +54,6 @@ services:
     ports:
       - 9696:9696
     restart: unless-stopped
-    user: 1000:1000
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
@@ -70,7 +66,6 @@ services:
     volumes:
       - /opt/appdata/overseerr:/app/config
     restart: unless-stopped
-    user: 1000:1000
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
@@ -85,7 +80,6 @@ services:
     ports:
       - 8080:8080
     restart: unless-stopped
-    user: 1000:1000
   homarr:
     image: ghcr.io/ajnart/homarr:latest
     container_name: homarr
@@ -98,7 +92,6 @@ services:
     ports:
       - 7575:7575
     restart: unless-stopped
-    user: 1000:1000
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
