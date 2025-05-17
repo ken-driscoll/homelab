@@ -55,7 +55,7 @@ services:
       - 9696:9696
     restart: unless-stopped
   overseerr:
-    image: lscr.io/linuxserver/overseerr:latest
+    image: sctx/overseerr
     container_name: overseerr
     environment:
       - PUID=1000
@@ -64,7 +64,7 @@ services:
     ports:
       - 5055:5055
     volumes:
-      - /opt/appdata/overseerr:/app/config
+      - /opt/appdata/overseerr:/config
     restart: unless-stopped
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
