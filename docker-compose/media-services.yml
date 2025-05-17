@@ -10,7 +10,7 @@ services:
     volumes:
       - /opt/appdata/sonarr:/config
       - /mnt/media:/media
-      - /mnt/downloads/complete:/downloads
+      - /mnt/downloads/sabznbd/complete/TVShows:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -24,7 +24,7 @@ services:
     volumes:
       - /opt/appdata/radarr:/config
       - /mnt/media:/media
-      - /mnt/downloads/complete:/downloads
+      - /mnt/downloads/sabnzbd/complete/Movies:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
     volumes:
       - /opt/appdata/readarr:/config
       - /mnt/media:/media
-      - /mnt/downloads/complete:/downloads
+      - /mnt/downloads/sabnzbd/complete/Books:/downloads
     ports:
       - 8787:8787
     restart: unless-stopped
@@ -75,8 +75,8 @@ services:
       - TZ=America/Chicago
     volumes:
       - /opt/appdata/sabnzbd:/config
-      - /mnt/downloads/complete:/downloads
-      - /mnt/downloads/incomplete:/incomplete-downloads
+      - /mnt/downloads/sabnzbd/complete:/downloads
+      - /mnt/downloads/sabnzbd/incomplete:/incomplete-downloads
     ports:
       - 8080:8080
     restart: unless-stopped

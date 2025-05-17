@@ -36,22 +36,22 @@ pct exec "$CTID" -- id -u media >/dev/null 2>&1 || pct exec "$CTID" -- adduser -
 # Bind datasets into the LXC
 echo "📎 Binding datasets into LXC $CTID..."
 grep -q "mp0:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp0 /core/app-configs/media-services,mp=/opt/appdata
-grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /core/media-downloads,mp=/mnt/downloads
+grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /core/downloads,mp=/mnt/downloads
 grep -q "mp2:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp2 /tank/media,mp=/mnt/media
 grep -q "mp3:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp3 /core/scripts/homelab/docker-compose,mp=/opt/compose
 
 # Copy Overseerr config backup before deploying
-BACKUP_PATH="/tank/app-configs-backup/overseerr"
-TARGET_PATH="/core/app-configs/media-services/overseerr"
-if [ -d "$BACKUP_PATH" ]; then
-    echo "📁 Copying Overseerr config backup to media-services..."
-    mkdir -p "$TARGET_PATH"
-    rsync -a "$BACKUP_PATH/" "$TARGET_PATH/"
-    echo "🔐 Setting permissions on Overseerr config..."
-    chown -R 1000:1000 "$TARGET_PATH"
-else
-    echo "⚠️ No Overseerr backup found at $BACKUP_PATH."
-fi
+# BACKUP_PATH="/tank/app-configs-backup/overseerr"
+# TARGET_PATH="/core/app-configs/media-services/overseerr"
+# if [ -d "$BACKUP_PATH" ]; then
+#     echo "📁 Copying Overseerr config backup to media-services..."
+#     mkdir -p "$TARGET_PATH"
+#     rsync -a "$BACKUP_PATH/" "$TARGET_PATH/"
+#     echo "🔐 Setting permissions on Overseerr config..."
+#     chown -R 1000:1000 "$TARGET_PATH"
+# else
+#     echo "⚠️ No Overseerr backup found at $BACKUP_PATH."
+# fi
 
 # Ensure Compose file exists
 echo "🐳 Checking for Compose file..."
@@ -63,5 +63,12 @@ fi
 # Deploy Docker Compose stack
 echo "🚀 Launching Docker Compose..."
 pct exec "$CTID" -- bash -c "cd /opt/compose && docker compose -f media-services.yml up -d"
+
+echo "Creating media-services.local"
+apt update
+apt install avahi-daemon avahi-utils -y
+hostnamectl set-hostname media-services
+systemctl enable --now avahi-daemon
+echo "media-services.local created"
 
 echo "✅ media-services LXC setup complete."
