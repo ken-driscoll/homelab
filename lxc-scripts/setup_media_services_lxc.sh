@@ -62,7 +62,7 @@ fi
 
 # Deploy Docker Compose stack
 echo "🚀 Launching Docker Compose..."
-pct exec "$CTID" -- bash -c "cd /opt/compose && docker compose -f media-services.yml up -d"
+pct exec "$CTID" -- bash -c "docker compose -f /opt/compose/media-services.yml up -d"
 
 echo "Creating media-services.local"
 apt update
