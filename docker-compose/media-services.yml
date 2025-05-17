@@ -50,7 +50,7 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
-      - /opt/appdata/prowlarr:/config
+      - /opt/appdata/prowlarr:/app/config
     ports:
       - 9696:9696
     restart: unless-stopped
