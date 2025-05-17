@@ -96,10 +96,10 @@ services:
     container_name: watchtower
     environment:
       - TZ=America/Chicago
-      - WATCHTOWER_SCHEDULE="0 0 3 * * *"
+      - WATCHTOWER_SCHEDULE=0 0 3 * * *
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_NOTIFICATIONS=shoutrrr
-      - WATCHTOWER_NOTIFICATION_URL="pushover://auuu5h8i6nq8ybfitcxcvgy9y4tpa8@unz3irft9xy83syphaofwhn8cx9zb2"
+      - WATCHTOWER_NOTIFICATION_URL=pushover://auuu5h8i6nq8ybfitcxcvgy9y4tpa8@unz3irft9xy83syphaofwhn8cx9zb2
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
