@@ -50,7 +50,7 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
-      - /opt/appdata/prowlarr:/app/config
+      - /opt/appdata/prowlarr:/config
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -64,7 +64,7 @@ services:
     ports:
       - 5055:5055
     volumes:
-      - /opt/appdata/overseerr:/config
+      - /opt/appdata/overseerr:/app/config
     restart: unless-stopped
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
