@@ -42,6 +42,20 @@ services:
     ports:
       - 8787:8787
     restart: unless-stopped
+  speakarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: speakarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - /opt/appdata/speakarr:/config
+      - /mnt/media:/media
+      - /mnt/downloads:/downloads
+    ports:
+      - 8787:8788
+    restart: unless-stopped
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
