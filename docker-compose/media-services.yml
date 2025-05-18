@@ -54,7 +54,7 @@ services:
       - /mnt/media:/media
       - /mnt/downloads:/downloads
     ports:
-      - 8787:8788
+      - 8788:8787
     restart: unless-stopped
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
