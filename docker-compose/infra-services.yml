@@ -1,7 +1,7 @@
 services:
   cloudflare-ddns-root:
     image: oznu/cloudflare-ddns
-    container_name: cloudflare-ddns
+    container_name: cloudflare-ddns-root
     restart: unless-stopped
     environment:
       - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
@@ -12,7 +12,7 @@ services:
 
   cloudflare-ddns-wildcard:
     image: oznu/cloudflare-ddns
-    container_name: cloudflare-ddns
+    container_name: cloudflare-ddns-wildcard
     restart: unless-stopped
     environment:
       - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
