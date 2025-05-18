@@ -1,0 +1,38 @@
+services:
+  cloudflare-ddns-root:
+    image: oznu/cloudflare-ddns
+    container_name: cloudflare-ddns
+    restart: unless-stopped
+    environment:
+      - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
+      - ZONE=kdrisc01.uk
+      - SUBDOMAIN=@
+      - PROXIED=true
+      - TZ=America/Chicago
+
+  cloudflare-ddns-wildcard:
+    image: oznu/cloudflare-ddns
+    container_name: cloudflare-ddns
+    restart: unless-stopped
+    environment:
+      - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
+      - ZONE=kdrisc01.uk
+      - SUBDOMAIN=*
+      - PROXIED=true
+      - TZ=America/Chicago
+
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    environment:
+      - TZ=America/Chicago
+      - PUID=1111
+      - PGID=1111
+    volumes:
+      - /opt/appdata/npm:/data
+      - /opt/appdata/letsencrypt:/etc/letsencrypt
