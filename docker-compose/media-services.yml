@@ -119,6 +119,20 @@ services:
     ports:
       - "8181:8181"
     restart: unless-stopped
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    ports:
+      - "13378:80"
+    volumes:
+      - /opt/appdata/audiobookshelf/config:/config
+      - /opt/appdata/audiobookshelf/metadata:/metadata
+      - /mnt/media:/media
+    restart: unless-stopped
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
