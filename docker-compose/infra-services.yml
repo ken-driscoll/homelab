@@ -58,7 +58,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=password
       - DOCKER_INFLUXDB_INIT_ORG=homelab
       - DOCKER_INFLUXDB_INIT_BUCKET=proxmox
-      - DOCKER_INFLUXDB_INIT_RETENTION=30d
+      - DOCKER_INFLUXDB_INIT_RETENTION=90d
     volumes:
       - /opt/appdata/influxdb:/var/lib/influxdb2
     ports:

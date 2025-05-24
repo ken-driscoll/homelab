@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'proxmox-node'
+    static_configs:
+      - targets: ['192.168.4.41:9100']   # node_exporter
+  - job_name: 'smartctl'
+    static_configs:
+      - targets: ['192.168.4.41:9633']   # smartctl_exporter
+  - job_name: 'sensors'
+    static_configs:
+      - targets: ['192.168.4.41:9191']   # sensors_exporter
+  - job_name: 'media-services-docker'
+    static_configs:
+      - targets: ['media-services:8080']   # cAdvisor
+  - job_name: 'infra-services-docker'
+    static_configs:
+      - targets: ['infra-services:8080']   # cAdvisor
