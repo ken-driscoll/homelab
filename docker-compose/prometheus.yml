@@ -13,7 +13,7 @@ scrape_configs:
       - targets: ['192.168.4.41:9255']   # sensors_exporter
   - job_name: 'media-services-docker'
     static_configs:
-      - targets: ['media-services:9292']   # cAdvisor
+      - targets: ['media-services.local:9292']   # cAdvisor
   - job_name: 'infra-services-docker'
     static_configs:
-      - targets: ['infra-services:9292']   # cAdvisor
+      - targets: ['infra-services.local:9292']   # cAdvisor
