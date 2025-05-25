@@ -10,10 +10,10 @@ scrape_configs:
       - targets: ['192.168.4.41:9633']   # smartctl_exporter
   - job_name: 'sensors'
     static_configs:
-      - targets: ['192.168.4.41:9191']   # sensors_exporter
+      - targets: ['192.168.4.41:9255']   # sensors_exporter
   - job_name: 'media-services-docker'
     static_configs:
-      - targets: ['media-services:8080']   # cAdvisor
+      - targets: ['media-services:9292']   # cAdvisor
   - job_name: 'infra-services-docker'
     static_configs:
-      - targets: ['infra-services:8080']   # cAdvisor
+      - targets: ['infra-services:9292']   # cAdvisor
