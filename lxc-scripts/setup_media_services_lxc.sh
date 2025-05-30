@@ -38,7 +38,7 @@ echo "📎 Binding datasets into LXC $CTID..."
 grep -q "mp0:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp0 /core/app-configs/media-services,mp=/opt/appdata
 grep -q "mp1:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp1 /core/downloads,mp=/mnt/downloads
 grep -q "mp2:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp2 /tank/media,mp=/mnt/media
-grep -q "mp3:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp3 /core/scripts/homelab/docker-compose,mp=/opt/compose
+grep -q "mp3:" /etc/pve/lxc/$CTID.conf || pct set "$CTID" -mp3 /core/scripts/homelab/docker-compose/media-services,mp=/opt/compose
 
 # Copy Overseerr config backup before deploying
 # BACKUP_PATH="/tank/app-configs-backup/overseerr"
