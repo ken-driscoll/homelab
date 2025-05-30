@@ -1,33 +1,17 @@
 #!/bin/bash
+# Set ERC/TLER on all spinning disks at startup
 
-# Configure SCT Error Recovery Control (ERC) on SMART-enabled SATA drives
-# Recommended for ZFS systems with consumer/NAS drives (e.g., WD Red, Seagate IronWolf)
+# ERC timeout values (tenths of a second): 70 = 7.0 seconds
+readsetting=70
+writesetting=70
 
-readsetting=70   # 7.0 seconds
-writesetting=70  # 7.0 seconds
-
-get_smart_drives() {
-  drives=$(smartctl --scan | grep "dev" | grep -v "nvme" | grep -v "ses" | awk '{print $1}' | sed 's|/dev/||')
-  smartdrives=""
-  for drive in $drives; do
-    if smartctl -i "/dev/$drive" | grep -q "SMART support is: Enabled"; then
-      smartdrives+="$drive "
-    fi
-  done
-  echo "$smartdrives"
-}
-
-set_erc() {
-  echo "🛠 Setting ERC on: /dev/$1"
-  smartctl -q silent -l scterc,"${readsetting}","${writesetting}" "/dev/$1"
-  smartctl -l scterc "/dev/$1" | grep "SCT\|Write\|Read"
-}
-
-main() {
-  drives=$(get_smart_drives)
-  for drive in $drives; do
-    set_erc "$drive"
-  done
-}
-
-main
+# Find all /dev/sd? spinning disks (skip NVMe, loop, etc.)
+for disk in /dev/sd?; do
+  if smartctl -l scterc "$disk" 2>&1 | grep -q "not supported"; then
+    echo "$disk: ERC not supported"
+    continue
+  fi
+  echo "Setting ERC for $disk"
+  smartctl -q silent -l scterc,"${readsetting}","${writesetting}" "$disk"
+  smartctl -l scterc "$disk" | grep -E 'Read|Write'
+done
