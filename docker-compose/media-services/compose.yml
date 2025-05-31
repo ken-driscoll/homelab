@@ -97,8 +97,6 @@ services:
     image: ghcr.io/homarr-labs/homarr:latest
     container_name: homarr
     environment:
-      - PUID=1000
-      - PGID=1000
       - TZ=America/Chicago
       - SECRET_ENCRYPTION_KEY=49dde5c1039a6418a8cde7ef885e3600661b11e2de026d9a0ce0ca15dfabfeb8
     volumes:
