@@ -85,6 +85,7 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/serial/by-id:/dev/serial/by-id:ro
     restart: unless-stopped
 
   watchtower:
