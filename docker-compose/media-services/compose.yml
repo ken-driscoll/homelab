@@ -180,7 +180,6 @@ services:
       - VPN_ENABLED=yes
       - VPN_PROV=custom
       - VPN_CLIENT=openvpn
-      - VPN_OPTIONS=--inactive 3600 --ping 10 --ping-exit 60
       - LAN_NETWORK=192.168.4.0/24  # adjust for your network
       - WEBUI_PORT=8484
       - STRICT_PORT_FORWARD=no      # Privado does NOT support port forwarding
