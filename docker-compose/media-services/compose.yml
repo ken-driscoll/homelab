@@ -185,8 +185,8 @@ services:
       - WEBUI_PORT=8484
       - STRICT_PORT_FORWARD=no      # Privado does NOT support port forwarding
     volumes:
-      - /core/app-configs/media-services/qbittorrent:/config
-      - /core/downloads/torrents:/data
+      - /opt/appdata/qbittorrent:/config
+      - /mnt/downloads/torrents:/data
     ports:
       - "8484:8484"     # Web UI
       - "6881:6881"     # TCP
