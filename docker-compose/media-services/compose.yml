@@ -170,3 +170,29 @@ services:
     devices:
       - /dev/kmsg:/dev/kmsg
     restart: unless-stopped
+  qbittorrentvpn:
+    image: binhex/arch-qbittorrentvpn
+    container_name: qbittorrentvpn
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - VPN_ENABLED=yes
+      - VPN_PROV=custom
+      - VPN_CLIENT=openvpn
+      - VPN_OPTIONS=--inactive 3600 --ping 10 --ping-exit 60
+      - LAN_NETWORK=192.168.4.0/24  # adjust for your network
+      - WEBUI_PORT=8484
+      - STRICT_PORT_FORWARD=no      # Privado does NOT support port forwarding
+    volumes:
+      - /core/app-configs/media-services/qbittorrent:/config
+      - /core/downloads/torrents:/data
+    ports:
+      - "8484:8484"     # Web UI
+      - "6881:6881"     # TCP
+      - "6881:6881/udp" # UDP
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+    restart: unless-stopped
