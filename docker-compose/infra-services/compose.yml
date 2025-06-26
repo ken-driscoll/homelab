@@ -23,7 +23,7 @@ services:
 
   cloudflare-ddns-torrent:
     image: oznu/cloudflare-ddns
-    container_name: cloudflare-ddns-wildcard
+    container_name: cloudflare-ddns-torrent
     restart: unless-stopped
     environment:
       - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
