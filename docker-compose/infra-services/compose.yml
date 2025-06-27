@@ -21,17 +21,6 @@ services:
       - PROXIED=true
       - TZ=America/Chicago
 
-  cloudflare-ddns-torrent:
-    image: oznu/cloudflare-ddns
-    container_name: cloudflare-ddns-torrent
-    restart: unless-stopped
-    environment:
-      - API_KEY=${CLOUDFLARE_API_KEY}
-      - ZONE=kdrisc01.uk
-      - SUBDOMAIN=torrent
-      - PROXIED=false
-      - TZ=America/Chicago
-
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager:latest
     container_name: nginx-proxy-manager
