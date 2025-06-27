@@ -4,7 +4,7 @@ services:
     container_name: cloudflare-ddns-root
     restart: unless-stopped
     environment:
-      - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
+      - API_KEY=${CLOUDFLARE_API_KEY}
       - ZONE=kdrisc01.uk
       - SUBDOMAIN=@
       - PROXIED=true
@@ -15,7 +15,7 @@ services:
     container_name: cloudflare-ddns-wildcard
     restart: unless-stopped
     environment:
-      - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
+      - API_KEY=${CLOUDFLARE_API_KEY}
       - ZONE=kdrisc01.uk
       - SUBDOMAIN=*
       - PROXIED=true
@@ -26,7 +26,7 @@ services:
     container_name: cloudflare-ddns-torrent
     restart: unless-stopped
     environment:
-      - API_KEY=lLlS7TYLNGoGajz7__ZVxNlSH5O18ZqxmMaGlt50
+      - API_KEY=${CLOUDFLARE_API_KEY}
       - ZONE=kdrisc01.uk
       - SUBDOMAIN=torrent
       - PROXIED=false
