@@ -194,3 +194,27 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
     restart: unless-stopped
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000
+    volumes:
+      - /opt/appdata/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: gethomepage.dev, kdrisc01.uk # required, may need port. See gethomepage.dev/installation/#homepage_allowed_hosts
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - /opt/appdata/bazarr:/config
+      - /mnt/media/Movies:/movies #optional
+      - "/mnt/media/TV Shows:/tv" #optional
+    ports:
+      - 6767:6767
+    restart: unless-stopped
