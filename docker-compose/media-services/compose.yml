@@ -68,9 +68,10 @@ services:
     ports:
       - 9696:9696
     restart: unless-stopped
-  overseerr:
-    image: sctx/overseerr
-    container_name: overseerr
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
     environment:
       - PUID=1000
       - PGID=1000
