@@ -71,18 +71,23 @@ The infra-services Cloudflare API key lives at `docker-compose/infra-services/.e
 
 ## Helper Scripts
 
-Run on the **Proxmox host**, not inside LXCs:
+Run on the **Proxmox host**, not inside LXCs. `update-homelab` is installed as a system command at `/usr/local/bin/update-homelab`.
 
 | Script | When to use |
 |---|---|
-| `update-homelab.sh` | After pushing changes — syncs repo to host so LXC bind mounts pick up the update |
-| `backup_pve_config.sh` | Manual or cron — backs up `/etc/pve` with 7-backup rotation |
+| `update-homelab.sh` | After pushing changes — also available as `update-homelab` system command |
+| `backup_pve_config.sh` | Runs nightly via cron at 3am (`/usr/local/sbin/backup_pve_config.sh`) |
 | `install-fan-and-erc-services.sh` | One-time after fresh Proxmox install — installs fan control + ERC systemd services |
-| `fan_control_stepped_noctua.sh` | **Active fan control script** (installed as `stepped-fan-control.service`) |
-| `set-erc.sh` | Installed as `set-erc.service` — runs at boot, sets 7s TLER on all spinning disks |
+| `fan-script/fan_control.py` | **Active fan control** — installed at `/usr/local/bin/fan_control.py`, running as `fan_control.service` (Python PID). The stepped/noctua shell scripts in the same directory are alternatives, not currently in use. |
+| `erc-script/set-erc.sh` | Installed as `set-erc.service` — oneshot at boot, sets 7s TLER on all spinning disks |
 | `map-media-uid-gid.sh <CTID>` | Run when adding a new unprivileged LXC that needs UID 1000 bind mount access |
 | `setup_samba.sh` | One-time infra-services Samba/Time Machine setup |
 | `setup-datasets-directories.sh` | One-time ZFS dataset + appdata directory scaffolding |
+| `update-downloads.sh` | Already run — one-time migration script, kept for reference |
+
+Useful installed utilities: `tail-fanlog` (streams `/var/log/fan_control.log`).
+
+**Sanoid** manages ZFS snapshots, running every hour via cron. Config at `/etc/sanoid/sanoid.conf` — snapshots `core/app-configs` and `tank/media`.
 
 ## LXC Setup Scripts (`lxc-scripts/`)
 

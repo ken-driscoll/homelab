@@ -278,6 +278,7 @@ External domain `kdrisc01.uk` uses Cloudflare proxied DDNS, with Nginx Proxy Man
 - App configs backed up to `tank/app-configs-backup`
 - Docker containers auto-updated daily at 3am via Watchtower (both LXCs) with Pushover notifications
 - ZFS scrubs run weekly (last clean scrub: April 12, 2026)
+- **Sanoid** runs ZFS snapshots hourly via cron (`5 * * * *`) — `core/app-configs` (24h/7d/2m retention) and `tank/media` (7d retention)
 
 ---
 
@@ -300,19 +301,17 @@ All scripts live in this repo and are run manually or installed as systemd servi
 
 ### `helper-scripts/`
 
-| Script | Purpose |
+| Script / Dir | Purpose |
 |---|---|
-| `update-homelab.sh` | `git pull` wrapper — run on the Proxmox host to sync compose files to LXCs |
-| `backup_pve_config.sh` | Backs up `/etc/pve` to `tank/proxmox-backups/pve-config/` — keeps 7 most recent |
-| `fan_control_stepped_noctua.sh` | **Active fan control** — stepped PWM curve for Noctua fans (Zone 0: CPU, Zone 1: HDD) via ipmitool; installed as `stepped-fan-control.service` |
-| `fan_control_pid_noctua.sh` | Alternative PID-based fan control (same hardware) |
-| `fan_control.py` | Alternative Python PID fan control |
-| `set-erc.sh` | Sets SCT ERC/TLER (7s timeout) on all spinning disks at boot — installed as `set-erc.service` |
+| `update-homelab.sh` | `git pull` wrapper — also installed as `/usr/local/bin/update-homelab` system command |
+| `backup_pve_config.sh` | Backs up `/etc/pve` to `tank/proxmox-backups/pve-config/`, keeps 7 most recent — runs nightly via cron at 3am |
+| `fan-script/` | Fan control scripts: `fan_control.py` **(active, installed as `fan_control.service`)**, `fan_control_pid_noctua.sh`, `fan_control_stepped_noctua.sh`, `stepped-fan-control.service` |
+| `erc-script/` | ERC/TLER scripts: `set-erc.sh` and `set-erc.service` — installed as `set-erc.service`, sets 7s TLER on all spinning disks at boot |
 | `install-fan-and-erc-services.sh` | Installs and enables the fan control + ERC systemd services |
 | `setup_samba.sh` | One-time: installs Samba + Cockpit, creates Time Machine shares with 1 TB quotas |
 | `setup-datasets-directories.sh` | One-time: creates ZFS datasets and appdata directory structure |
 | `map-media-uid-gid.sh <CTID>` | Maps UID 1000 in an unprivileged LXC to host UID 1000 (preserves file ownership across bind mounts) |
-| `update-downloads.sh` | One-time migration: moved download staging from `core/media-downloads` to `core/downloads` |
+| `update-downloads.sh` | One-time migration script (already run — moved download staging from `core/media-downloads` to `core/downloads`) |
 
 ### `lxc-scripts/`
 
