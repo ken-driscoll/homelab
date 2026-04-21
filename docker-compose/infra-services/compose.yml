@@ -103,6 +103,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
   
+  overtalking-booking:
+    image: ghcr.io/ken-driscoll/overtalking-booking:latest
+    container_name: overtalking-booking
+    restart: unless-stopped
+    env_file:
+      - /opt/appdata/overtalking-booking/.env
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+
   portainer-agent:
     image: portainer/agent:latest
     container_name: portainer-agent
