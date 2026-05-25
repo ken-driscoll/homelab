@@ -132,6 +132,22 @@ services:
       - /opt/appdata/audiobookshelf/metadata:/metadata
       - /mnt/media:/media
     restart: unless-stopped
+  audiobookshelf-dev:
+    image: ghcr.io/ken-driscoll/audiobookshelf:dev
+    container_name: audiobookshelf-dev
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    ports:
+      - "13379:80"
+    volumes:
+      - /opt/appdata/audiobookshelf-dev/config:/config
+      - /opt/appdata/audiobookshelf-dev/metadata:/metadata
+      - /mnt/media:/media:ro
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    restart: unless-stopped
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
