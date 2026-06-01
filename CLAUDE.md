@@ -96,6 +96,31 @@ Interactive scripts run on the Proxmox host to provision new LXC containers:
 - `setup_media_services_lxc.sh` — prompts for CTID, creates media user, binds all datasets, deploys compose stack
 - `setup_plex_lxc.sh` — prompts for CTID, uses Proxmox community script, enables GPU passthrough for Intel Quick Sync
 
+## DNS & External Domains
+
+Three `cloudflare-ddns` containers in infra-services keep `kdrisc01.uk` up to date:
+
+| Container | Record | Proxied | Purpose |
+|---|---|---|---|
+| `cloudflare-ddns-root` | `kdrisc01.uk` (@) | Yes | Root domain |
+| `cloudflare-ddns-wildcard` | `*.kdrisc01.uk` | Yes | All subdomains |
+| `cloudflare-ddns-home` | `home.kdrisc01.uk` | **No** | CNAME target for external domains |
+
+`home.kdrisc01.uk` is the unproxied record to use as a CNAME target when pointing external domains (e.g. Namecheap) at the homelab. Proxied records can't be used as CNAME targets from outside Cloudflare because Cloudflare can't issue TLS certs for domains it doesn't manage.
+
+### External domains
+
+| Domain | Registrar | Points to | Notes |
+|---|---|---|---|
+| `overtalkingpod.party` | Namecheap | Namecheap URL redirect → libsyn | HTTP only — Namecheap redirect doesn't support HTTPS |
+| `booking.overtalkingpod.party` | Namecheap | CNAME → `home.kdrisc01.uk` → NPM → `overtalking-booking:3001` | Google OAuth credentials must include this domain |
+
+### Adding a new external domain
+
+1. Add a CNAME in the registrar pointing the subdomain to `home.kdrisc01.uk`
+2. Add a proxy host in NPM ([http://192.168.5.235:81](http://192.168.5.235:81)) with Let's Encrypt SSL
+3. If the service uses Google OAuth, add the new domain to the authorized origins/redirect URIs in [Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Credentials
+
 ## Recyclarr
 
 `app-configs/recyclarr/recyclarr.yml` manages custom format and quality profile sync for Radarr (port 30025) and Sonarr (port 30027) on the Proxmox host. Run Recyclarr manually or via cron — it's not containerized in this repo.
