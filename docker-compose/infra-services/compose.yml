@@ -21,6 +21,17 @@ services:
       - PROXIED=true
       - TZ=America/Chicago
 
+  cloudflare-ddns-home:
+    image: oznu/cloudflare-ddns
+    container_name: cloudflare-ddns-home
+    restart: unless-stopped
+    environment:
+      - API_KEY=${CLOUDFLARE_API_KEY}
+      - ZONE=kdrisc01.uk
+      - SUBDOMAIN=home
+      - PROXIED=false
+      - TZ=America/Chicago
+
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager:latest
     container_name: nginx-proxy-manager
