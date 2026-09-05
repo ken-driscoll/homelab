@@ -256,9 +256,18 @@ services:
       - 6767:6767
     restart: unless-stopped
   rreading-glasses:
-    image: blampe/rreading-glasses:latest
+    # Upstream blampe/rreading-glasses:latest is stuck on a revoked Goodreads
+    # AppSync token (HTTP 401 on every lookup) — see upstream issue #586. main
+    # hasn't moved since 2026-04-25 and :latest hasn't been rebuilt since
+    # 2026-02-16, so build the one-line token fix from PR #590's fork instead.
+    # Revert to blampe/rreading-glasses:latest once #590 is merged.
+    # https://github.com/blampe/rreading-glasses/pull/590
+    build:
+      context: https://github.com/Faustvii/rreading-glasses.git#fix/update-token
+      args:
+        RGPATH: ./cmd/rggr
+    image: rreading-glasses:pr590
     container_name: rreading-glasses
-    pull_policy: always
     entrypoint: ["/main", "serve"]
     command:
       - --upstream=www.goodreads.com
@@ -271,6 +280,10 @@ services:
     ports:
       - "8789:8788"
     mem_limit: 128m
+    labels:
+      # Locally built tag with no registry behind it — watchtower would fail
+      # to pull it every night and report it as a failure over Pushover.
+      - "com.centurylinklabs.watchtower.enable=false"
     depends_on:
       - rreading-glasses-db
     restart: unless-stopped
