@@ -110,10 +110,14 @@ Three `cloudflare-ddns` containers in infra-services keep `kdrisc01.uk` up to da
 
 ### External domains
 
-| Domain | Registrar | Points to | Notes |
-|---|---|---|---|
-| `overtalkingpod.party` | Namecheap | Namecheap URL redirect → libsyn | HTTP only — Namecheap redirect doesn't support HTTPS |
-| `booking.overtalkingpod.party` | Namecheap | CNAME → `home.kdrisc01.uk` → NPM → `overtalking-booking:3001` | Google OAuth credentials must include this domain |
+| Domain | Registrar | DNS | Points to | Notes |
+|---|---|---|---|---|
+| `overtalkingpod.party` | Namecheap | Cloudflare | Cloudflare Redirect Rule → `https://overtalkingpod.libsyn.com/` (301) | Apex + `www` are proxied A records to `192.0.2.1` — a dummy IP that exists only so the redirect rule fires at the edge |
+| `booking.overtalkingpod.party` | Namecheap | Cloudflare | CNAME → `home.kdrisc01.uk` → NPM → `overtalking-booking:3001` | Must stay **DNS only** (unproxied) or NPM's Let's Encrypt renewal breaks. Google OAuth credentials must include this domain |
+
+`overtalkingpod.party` uses Cloudflare nameservers (a separate zone from `kdrisc01.uk`) rather than Namecheap BasicDNS. It was migrated because Namecheap's URL Forwarding serves HTTP only — port 443 on their forwarder is closed — and browsers now upgrade typed bare domains to HTTPS by default, so the redirect stopped resolving for visitors. Cloudflare terminates TLS at the edge and issues the cert automatically.
+
+Moving the nameservers also disabled Namecheap Email Forwarding (the `eforward*.registrar-servers.com` MX records), which only works on Namecheap BasicDNS. Cloudflare Email Routing replaces it if mail on this domain is ever needed.
 
 ### Adding a new external domain
 
