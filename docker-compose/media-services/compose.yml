@@ -260,13 +260,14 @@ services:
     # AppSync token (HTTP 401 on every lookup) — see upstream issue #586. main
     # hasn't moved since 2026-04-25 and :latest hasn't been rebuilt since
     # 2026-02-16, so build the one-line token fix from PR #590's fork instead.
-    # Revert to blampe/rreading-glasses:latest once #590 is merged.
+    # Goodreads also started returning fractional ratingsSum values, which fail
+    # to decode and freeze affected books at stale metadata (issue #577), so
+    # PR #585's fix is patched on top — see rreading-glasses/Dockerfile.
+    # Revert to blampe/rreading-glasses:latest once #590 and #585 are merged.
     # https://github.com/blampe/rreading-glasses/pull/590
-    build:
-      context: https://github.com/Faustvii/rreading-glasses.git#fix/update-token
-      args:
-        RGPATH: ./cmd/rggr
-    image: rreading-glasses:pr590
+    # https://github.com/blampe/rreading-glasses/pull/585
+    build: ./rreading-glasses
+    image: rreading-glasses:pr590-pr585
     container_name: rreading-glasses
     entrypoint: ["/main", "serve"]
     command:

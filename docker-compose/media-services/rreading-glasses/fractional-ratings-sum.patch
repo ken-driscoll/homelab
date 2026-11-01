@@ -1,0 +1,56 @@
+diff --git a/gr/generated.go b/gr/generated.go
+index 10d5b03..1da1de9 100644
+--- a/gr/generated.go
++++ b/gr/generated.go
+@@ -208,7 +208,7 @@ func (v *BookInfoPrimaryContributorEdgeBookContributorEdgeNodeContributor) GetDe
+ type BookInfoStatsBookOrWorkStats struct {
+ 	AverageRating float64 `json:"averageRating"`
+ 	RatingsCount  int64   `json:"ratingsCount"`
+-	RatingsSum    int64   `json:"ratingsSum"`
++	RatingsSum    float64 `json:"ratingsSum"`
+ }
+ 
+ // GetAverageRating returns BookInfoStatsBookOrWorkStats.AverageRating, and is useful for accessing the field via an interface.
+@@ -218,7 +218,7 @@ func (v *BookInfoStatsBookOrWorkStats) GetAverageRating() float64 { return v.Ave
+ func (v *BookInfoStatsBookOrWorkStats) GetRatingsCount() int64 { return v.RatingsCount }
+ 
+ // GetRatingsSum returns BookInfoStatsBookOrWorkStats.RatingsSum, and is useful for accessing the field via an interface.
+-func (v *BookInfoStatsBookOrWorkStats) GetRatingsSum() int64 { return v.RatingsSum }
++func (v *BookInfoStatsBookOrWorkStats) GetRatingsSum() float64 { return v.RatingsSum }
+ 
+ // GetAuthorWorksGetWorksByContributorContributorWorksConnection includes the requested fields of the GraphQL type ContributorWorksConnection.
+ type GetAuthorWorksGetWorksByContributorContributorWorksConnection struct {
+diff --git a/gr/schema.graphql b/gr/schema.graphql
+index 1629e01..cb7677e 100644
+--- a/gr/schema.graphql
++++ b/gr/schema.graphql
+@@ -968,7 +968,7 @@ type BookOrWorkStats {
+   lastReviewAt: Float
+   ratingsCount: Int
+   ratingsCountDist: [Int]
+-  ratingsSum: Int
++  ratingsSum: Float
+   textReviewsCount: Int
+   textReviewsLanguageCounts: [TextReviewLanguageCount]
+ }
+diff --git a/internal/gr.go b/internal/gr.go
+index ce95942..d21f795 100644
+--- a/internal/gr.go
++++ b/internal/gr.go
+@@ -9,6 +9,7 @@ import (
+ 	"fmt"
+ 	"iter"
+ 	"maps"
++	"math"
+ 	"net/http"
+ 	"slices"
+ 	"strings"
+@@ -320,7 +321,7 @@ func mapToWorkResource(book gr.BookInfo, work gr.GetBookGetBookByLegacyIdBookWor
+ 		IsEbook:            book.Details.Format == "Kindle Edition", // TODO: Flush this out.
+ 		NumPages:           book.Details.NumPages,
+ 		RatingCount:        book.Stats.RatingsCount,
+-		RatingSum:          book.Stats.RatingsSum,
++		RatingSum:          int64(math.Round(book.Stats.RatingsSum)),
+ 		AverageRating:      book.Stats.AverageRating,
+ 		URL:                book.WebUrl,
+ 		// TODO: Omitting release date is a way to essentially force R to hide
